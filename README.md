@@ -1,122 +1,88 @@
-# 🧠 AI Quiz Builder
+# QuizMaster.AI
 
-![Banner](https://img.shields.io/badge/AI--Quiz--Builder-Powered%20by%20OpenAI-blue?style=for-the-badge&logo=openai)
-![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
-![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)
-![Socket.io](https://img.shields.io/badge/Socket.io-010101?style=for-the-badge&logo=socketdotio&logoColor=white)
-![MongoDB](https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white)
-![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
+**Transform any PDF or topic into an interactive battle of wits. Powered by advanced AI for instant, unlimited learning.**
 
-An ultra-modern, high-security AI-powered quiz platform designed for educators and hosts. Create engaging quizzes from raw topics or PDF documents in seconds, host live sessions with real-time feedback, and maintain academic integrity with built-in anti-cheat mechanisms.
+![Landing Page](assets/landing_page.png)
 
----
+## Overview
+QuizMaster.AI is a real-time, multiplayer quiz platform that leverages OpenAI to automatically generate quizzes from any topic or uploaded PDF document. It features a seamless Host-Player interaction model with robust anti-cheating mechanisms, making it perfect for classrooms, corporate training, or fun trivia nights.
 
-## ✨ Key Features
+## Core Functions
 
-### 🤖 AI-Powered Quiz Generation
-- **Prompt to Quiz**: Simply type a topic or specific instructions to generate high-quality MCQs.
-- **PDF Upload**: Upload textbooks, research papers, or notes, and let the AI extract questions automatically.
-- **Customizable**: Control the number of questions and time limits per session.
+### 1. AI-Powered Quiz Generation
+- **Topic-based**: Simply type a topic (e.g., "The French Revolution", "Quantum Physics") and the AI generates relevant questions.
+- **PDF-to-Quiz**: Upload study materials, lecture notes, or any PDF document. The system analyzes the content and creates a quiz tailored to that specific material.
+- **Customizable**: Set the number of questions and time limits per quiz.
 
-### 🛡️ Secure Proctoring (Anti-Cheat)
-- **Tab/Window Detection**: Real-time alerts to the host when a student switches tabs or minimizes the browser.
-- **Resize Monitoring**: Detects if students are trying to split-screen to search for answers.
-- **Focus Alerts**: Notifies the host if the game window loses focus (clicks away).
-- **Violation Logging**: Tracks the number and type of violations per student for final evaluation.
+### 2. Real-Time Host Dashboard
+- **Live Leaderboard**: Watch player scores update in real-time as they answer questions.
+- **Cheat Monitoring**: Receive instant notifications if a player violates the anti-cheating rules (tab switching, minimizing, etc.).
+- **Data Export**: Export the final results, including scores and violation reports, to Excel for grading or record-keeping.
 
-### 📊 Professional Management
-- **Live Host Dashboard**: See student progress, scores, and cheating alerts in real-time.
-- **Excel Export**: Hosts can download a complete leaderboard with names, marks, and violation counts.
-- **Word Export for Students**: Students can download a professionally formatted document containing all questions and correct solutions for study.
-- **Pin-Based Entry**: Secure game rooms accessible via unique 6-digit PINs.
+### 3. Interactive Player Experience
+- **Easy Join**: Players join using a unique Game PIN—no account required.
+- **Engaging UI**: Smooth animations, instant feedback on answers, and a competitive atmosphere.
+- **result Analysis**: Players can download a detailed solution sheet after the game.
 
-### 🎨 Premium User Experience
-- **Glassmorphism UI**: A sleek, dark-themed aesthetic with vibrant gradients and smooth animations.
-- **Responsive Design**: Flawlessly works on desktops, tablets, and phones.
-- **Interactive Feedback**: Real-time animations for correct/incorrect answers and final marks.
+### 4. Advanced Anti-Cheating System
+To ensure fair play, the application monitors player activity:
+- **Focus Tracking**: Detects if the player switches tabs or minimizes the window.
+- **Blur Detection**: Detects if the player clicks away from the quiz area.
+- **Resize Detection**: Monitors window resizing attempts.
+- **Screenshot Prevention**: Blocks or flags screenshot attempts (browser dependent).
 
 ---
 
-## 🛠️ Tech Stack
+## Walkthrough
 
-- **Frontend**: React 19, Tailwind CSS, Vite
-- **Backend**: Node.js, Express
-- **Real-time**: Socket.io
-- **Database**: MongoDB (Mongoose)
-- **AI**: OpenAI / OpenRouter (GPT-3.5 Turbo / Higher)
-- **Exporting**: SheetJS (XLSX), Docx, File-Saver
-- **PDF Processing**: PDF-Parse
+### Step 1: Landing Page
+Choose your role. Hosts can access the dashboard to create quizzes, while students can join an existing session with a PIN.
+![Landing Page](assets/landing_page.png)
+
+### Step 2: Create a Quiz (Host)
+Upload a PDF or enter a topic. Configure the number of questions and duration, then click "Generate Quiz".
+![Host Create](assets/host_create.png)
+
+### Step 3: Game Lobby & Monitoring
+As a host, share the PIN with players. Once the game starts, you can monitor the live leaderboard.
+> **Note:** The Red notifications indicate **Anti-Cheating Violations**. You can see exactly which player left the tab or lost focus.
+![Host Monitoring](assets/host_monitoring.png)
+
+### Step 4: Player Gameplay
+Players answer questions in real-time. The interface is distraction-free to encourage focus.
+![Player Question](assets/player_question.png)
 
 ---
 
-## 🚀 Getting Started
+## Tech Stack
+- **Frontend**: React, TailwindCSS, Socket.io-client
+- **Backend**: Node.js, Express, Socket.io, MongoDB
+- **AI**: OpenAI API (GPT-3.5/4)
 
-### Prerequisites
-- Node.js (v18+)
-- MongoDB (Local or Atlas)
-- OpenAI API Key
-
-### Installation
+## Installation
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/cout-arya/quiz-generator.git
-   cd quiz-generator
+   git clone https://github.com/yourusername/ai-quiz-builder.git
+   cd ai-quiz-builder
    ```
 
-2. **Server Setup**
+2. **Install Dependencies**
    ```bash
-   cd server
-   npm install
+   npm run install-all
    ```
+
+3. **Environment Setup**
    Create a `.env` file in the `server` directory:
    ```env
    PORT=5000
-   MONGODB_URI=your_mongodb_uri
-   OPENAI_API_KEY=your_api_key
-   JWT_SECRET=your_secret_key
+   MONGO_URI=your_mongodb_connection_string
+   OPENAI_API_KEY=your_openai_api_key
+   JWT_SECRET=your_jwt_secret
    ```
-   Start the server:
+
+4. **Run the Application**
    ```bash
-   npm run dev
+   npm start
    ```
-
-3. **Client Setup**
-   ```bash
-   cd ../client
-   npm install
-   npm run dev
-   ```
-   The application will be running at `http://localhost:5173`.
-
----
-
-## 📸 Screenshots
-
-| Landing Page | Host Dashboard | Player Game |
-|:---:|:---:|:---:|
-| ✨ Aesthetic & Modern | 📊 Real-time Monitoring | 🎮 Engagement Focused |
-
-*(Screenshots coming soon)*
-
----
-
-## 🤝 Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
----
-
-## 📄 License
-
-Distributed under the MIT License. See `LICENSE` for more information.
-
----
-
-
+   This will start both the client and server concurrently.

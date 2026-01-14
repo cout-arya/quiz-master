@@ -58,9 +58,7 @@ const LandingPage = () => {
                 </Link>
             </div>
 
-            <footer className="absolute bottom-6 w-full text-center text-white/20 text-xs font-mono tracking-widest uppercase">
-                <p>Designed for the Next Generation of Learners</p>
-            </footer>
+
         </div>
     );
 };
