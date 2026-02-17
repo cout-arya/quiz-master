@@ -11,6 +11,7 @@ const QuizSchema = new mongoose.Schema({
     title: String,
     topic: String,
     questions: [QuestionSchema],
+    totalTime: { type: Number, default: 10 },
     createdAt: { type: Date, default: Date.now }
 });
 

@@ -20,12 +20,37 @@ const HostDashboard = () => {
 
     const [notifications, setNotifications] = useState([]);
     const [showEndSessionModal, setShowEndSessionModal] = useState(false);
+    const [minutes, setMinutes] = useState(0);
+    const [seconds, setSeconds] = useState(0);
+    const [timeUp, setTimeUp] = useState(false);
+
+    useEffect(() => {
+        if (gameStatus === 'active' && !timeUp) {
+            const interval = setInterval(() => {
+                if (seconds > 0) {
+                    setSeconds(p => p - 1);
+                } else if (minutes > 0) {
+                    setMinutes(p => p - 1);
+                    setSeconds(59);
+                } else {
+                    clearInterval(interval);
+                    setTimeUp(true);
+                }
+            }, 1000);
+            return () => clearInterval(interval);
+        }
+    }, [gameStatus, timeUp, minutes, seconds]);
 
     useEffect(() => {
         if (!socket) return;
         socket.on('game_created', ({ pin }) => { setPin(pin); setGameStatus('lobby'); });
         socket.on('player_joined', ({ players }) => setPlayers(players));
-        socket.on('game_started', () => setGameStatus('active'));
+        socket.on('game_started', ({ totalTime }) => {
+            setGameStatus('active');
+            setMinutes(totalTime || 10);
+            setSeconds(0);
+            setTimeUp(false);
+        });
         socket.on('update_dashboard', ({ players, lastViolation }) => {
             console.log('[Host] update_dashboard received, lastViolation:', lastViolation);
             setPlayers(players);
@@ -318,12 +343,23 @@ const HostDashboard = () => {
                                     {gameStatus === 'lobby' ? 'Lobby Open' : 'Game Active'}
                                 </div>
                                 {gameStatus === 'active' && (
-                                    <button
-                                        className="mt-6 w-full px-4 py-2 bg-red-500/20 text-red-400 border border-red-500/50 rounded-lg hover:bg-red-500/30 transition-colors text-sm font-bold"
-                                        onClick={handleEndSession}
-                                    >
-                                        End Session
-                                    </button>
+                                    <>
+                                        <div className="mt-6 p-4 bg-white/5 rounded-xl border border-white/10">
+                                            <span className="block text-xs uppercase tracking-widest text-gray-400 mb-2">Time Remaining</span>
+                                            <div className={`text-4xl font-black font-mono ${minutes < 1 ? 'text-red-400 animate-pulse' : 'text-primary'}`}>
+                                                {minutes}:{seconds < 10 ? `0${seconds}` : seconds}
+                                            </div>
+                                            {timeUp && (
+                                                <span className="block text-xs text-red-400 mt-2 font-bold">TIME'S UP!</span>
+                                            )}
+                                        </div>
+                                        <button
+                                            className="mt-4 w-full px-4 py-2 bg-red-500/20 text-red-400 border border-red-500/50 rounded-lg hover:bg-red-500/30 transition-colors text-sm font-bold"
+                                            onClick={handleEndSession}
+                                        >
+                                            End Session
+                                        </button>
+                                    </>
                                 )}
                             </div>
 

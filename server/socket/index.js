@@ -53,7 +53,9 @@ module.exports = (io) => {
             const game = games[pin];
             if (game && game.hostId === socket.id) {
                 game.status = 'active';
-                io.to(pin).emit('game_started', { totalTime: game.quiz.totalTime || 10 });
+                game.startTime = Date.now();
+                const totalTime = game.quiz.totalTime || 10;
+                io.to(pin).emit('game_started', { totalTime });
                 // Send first question to ALL players
                 game.players.forEach(player => {
                     sendQuestionToPlayer(io, player.id, game.quiz.questions[0], 0, game.quiz.questions.length);
