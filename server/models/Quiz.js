@@ -12,7 +12,22 @@ const QuizSchema = new mongoose.Schema({
     topic: String,
     questions: [QuestionSchema],
     totalTime: { type: Number, default: 10 },
-    createdAt: { type: Date, default: Date.now }
+    createdAt: { type: Date, default: Date.now },
+
+    // ─── Quiz Library Fields ───
+    hostId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    tags: [String],
+    isPublic: { type: Boolean, default: false },
+    isDraft: { type: Boolean, default: false },
+    usageCount: { type: Number, default: 0 },
+    scheduledAt: { type: Date, default: null },
+    description: { type: String, default: '' },
+    source: { type: String, enum: ['ai', 'manual', 'ai-edited'], default: 'ai' },
+    deletedAt: { type: Date, default: null },
 });
+
+// Index for common queries
+QuizSchema.index({ hostId: 1, deletedAt: 1 });
+QuizSchema.index({ isPublic: 1, scheduledAt: 1 });
 
 module.exports = mongoose.model('Quiz', QuizSchema);

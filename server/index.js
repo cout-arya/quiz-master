@@ -4,19 +4,38 @@ const { Server } = require('socket.io');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path');
+const rateLimit = require('express-rate-limit');
 require('dotenv').config();
+
+const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:5173';
 
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
     cors: {
-        origin: '*', // Allow all for dev
-        methods: ['GET', 'POST']
+        origin: CLIENT_URL,
+        methods: ['GET', 'POST', 'PUT', 'DELETE'],
+        credentials: true
     }
 });
 
-app.use(cors());
+// CORS — restrict to known client origin
+app.use(cors({
+    origin: CLIENT_URL,
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: true
+}));
 app.use(express.json());
+
+// Rate limiting — AI quiz generation (10 requests per minute)
+const aiLimiter = rateLimit({
+    windowMs: 60 * 1000,
+    max: 10,
+    message: { error: 'Too many requests — please try again in a minute' },
+    standardHeaders: true,
+    legacyHeaders: false
+});
+app.use('/api/quizzes/generate', aiLimiter);
 
 // Database Connection
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/ai-quiz-builder')

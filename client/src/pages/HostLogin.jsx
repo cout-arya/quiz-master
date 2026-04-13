@@ -45,7 +45,7 @@ const HostLogin = () => {
 
                 <form onSubmit={handleSubmit} className="space-y-6">
                     <div>
-                        <label className="block mb-2 text-sm text-gray-400 font-medium tracking-wide">USERNAME</label>
+                        <label className="block mb-2 text-sm text-onSurfaceVariant font-medium tracking-wide">USERNAME</label>
                         <input
                             type="text"
                             className="input-glass"
@@ -56,7 +56,7 @@ const HostLogin = () => {
                         />
                     </div>
                     <div>
-                        <label className="block mb-2 text-sm text-gray-400 font-medium tracking-wide">PASSWORD</label>
+                        <label className="block mb-2 text-sm text-onSurfaceVariant font-medium tracking-wide">PASSWORD</label>
                         <input
                             type="password"
                             className="input-glass"
@@ -72,11 +72,11 @@ const HostLogin = () => {
                     </button>
                 </form>
 
-                <p className="text-center mt-6 text-gray-400">
+                <p className="text-center mt-6 text-onSurfaceVariant">
                     {isLogin ? "Don't have an account? " : "Already have an account? "}
                     <button
                         onClick={() => setIsLogin(!isLogin)}
-                        className="text-primary font-bold hover:text-accent transition-colors ml-1"
+                        className="text-primary font-bold hover:text-primary transition-colors ml-1"
                     >
                         {isLogin ? 'Register' : 'Login'}
                     </button>
@@ -84,7 +84,7 @@ const HostLogin = () => {
 
                 <button
                     onClick={() => navigate('/')}
-                    className="w-full mt-4 text-sm text-gray-500 hover:text-white transition-colors flex items-center justify-center gap-2"
+                    className="w-full mt-4 text-sm text-onSurfaceVariant hover:text-onSurface transition-colors flex items-center justify-center gap-2"
                 >
                     <span>←</span> Back to Home
                 </button>

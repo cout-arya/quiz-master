@@ -7,12 +7,12 @@ export default {
     theme: {
         extend: {
             colors: {
-                background: "#0f172a", // Slate 900
-                surface: "#1f2937", // Gray 800
-                primary: "#6366f1", // Indigo 500
-                secondary: "#8b5cf6", // Violet 500
-                accent: "#10b981", // Emerald 500
-                danger: "#ef4444", // Red 500
+                background: "#0c1222",
+                surface: "#162032",
+                primary: "#0ea5e9",    // Sky 500 — clean, professional blue
+                secondary: "#06b6d4",  // Cyan 500
+                accent: "#14b8a6",     // Teal 500
+                danger: "#f43f5e",     // Rose 500
             },
             animation: {
                 'fade-in': 'fadeIn 0.5s ease-out',

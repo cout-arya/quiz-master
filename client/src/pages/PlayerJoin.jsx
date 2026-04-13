@@ -26,7 +26,9 @@ const PlayerJoin = () => {
     return (
         <div className="min-h-screen flex items-center justify-center p-4">
             <div className="card-glass w-full max-w-md animate-fade-in text-center p-6 sm:p-10">
-                <div className="text-5xl sm:text-6xl mb-4 sm:mb-6">🎮</div>
+                <div className="w-16 h-16 mx-auto mb-4 sm:mb-6 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center">
+                    <svg className="w-8 h-8 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 5.25a3 3 0 0 1 3 3m3 0a6 6 0 0 1-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1 1 21.75 8.25Z" /></svg>
+                </div>
                 <h2 className="text-2xl sm:text-3xl font-bold mb-6 sm:mb-8 bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent">
                     Join Game Room
                 </h2>
@@ -63,7 +65,7 @@ const PlayerJoin = () => {
 
                 <button
                     onClick={() => navigate('/')}
-                    className="w-full mt-8 text-sm text-gray-500 hover:text-white transition-colors flex items-center justify-center gap-2"
+                    className="w-full mt-8 text-sm text-onSurfaceVariant hover:text-onSurface transition-colors flex items-center justify-center gap-2"
                 >
                     <span>←</span> Back to Home
                 </button>

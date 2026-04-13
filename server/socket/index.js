@@ -4,7 +4,6 @@ module.exports = (io) => {
     const games = {};
 
     io.on('connection', (socket) => {
-        // console.log('User connected:', socket.id);
 
         // Host creates a game
         socket.on('create_game', async ({ quizId }) => {
@@ -17,7 +16,7 @@ module.exports = (io) => {
                     id: pin,
                     hostId: socket.id,
                     quiz: quiz,
-                    players: [], // { id, name, score, currentQuestionIndex, finished }
+                    players: [],
                     status: 'lobby',
                 };
                 socket.join(pin);
@@ -39,7 +38,8 @@ module.exports = (io) => {
                     score: 0,
                     currentQuestionIndex: 0,
                     finished: false,
-                    violationCount: 0
+                    violationCount: 0,
+                    violations: {},
                 });
                 io.to(game.hostId).emit('player_joined', { players: game.players });
                 socket.emit('joined_game', { pin });
@@ -82,7 +82,6 @@ module.exports = (io) => {
                     score: player.score,
                     quiz: game.quiz
                 });
-                // Notify host of completion
                 io.to(game.hostId).emit('update_dashboard', { players: game.players });
             }
         });
@@ -104,31 +103,24 @@ module.exports = (io) => {
 
             socket.emit('answer_result', { isCorrect, correctIndex: question.correctIndex, score: player.score });
 
-            // Update Host Dashboard Live
             io.to(game.hostId).emit('update_dashboard', {
                 players: game.players
             });
         });
 
-        // Player violation (tab switch/minimize)
+        // Player violation (tab switch, minimize, fullscreen exit, webcam denied, etc.)
         socket.on('player_violation', ({ pin, type }) => {
-            console.log(`[Server] Received violation: ${type} from ${socket.id} for pin ${pin}`);
             const game = games[pin];
-            if (!game) {
-                console.log(`[Server] Game not found for pin ${pin}`);
-                return;
-            }
+            if (!game) return;
 
             const player = game.players.find(p => p.id === socket.id);
-            if (!player) {
-                console.log(`[Server] Player not found for socket ${socket.id}`);
-                return;
-            }
+            if (!player) return;
 
             player.violationCount = (player.violationCount || 0) + 1;
-            player.lastViolationType = type; // Store the type of the last violation
+            if (!player.violations) player.violations = {};
+            player.violations[type] = (player.violations[type] || 0) + 1;
+            player.lastViolationType = type;
 
-            console.log(`[Server] Updating dashboard for host ${game.hostId} with violation ${type}`);
             // Notify host immediately
             io.to(game.hostId).emit('update_dashboard', {
                 players: game.players,
@@ -141,7 +133,20 @@ module.exports = (io) => {
         });
 
         socket.on('disconnect', () => {
-            // Cleanup logic simplified
+            // Cleanup: remove player from active games
+            for (const pin in games) {
+                const game = games[pin];
+                const playerIndex = game.players.findIndex(p => p.id === socket.id);
+                if (playerIndex !== -1) {
+                    game.players.splice(playerIndex, 1);
+                    io.to(game.hostId).emit('update_dashboard', { players: game.players });
+                }
+                // If host disconnects, clean up the game
+                if (game.hostId === socket.id) {
+                    io.to(pin).emit('error', { message: 'Host has disconnected' });
+                    delete games[pin];
+                }
+            }
         });
     });
 };
