@@ -60,7 +60,7 @@ const LandingPage = () => {
                     </div>
                 </Link>
 
-                <Link to="/host/login" className="group relative">
+                <Link to={localStorage.getItem('token') ? '/host' : '/host/login'} className="group relative">
                     <div className="absolute inset-0 bg-gradient-to-r from-primary to-teal-500 rounded-3xl blur opacity-20 group-hover:opacity-40 transition-opacity duration-500"></div>
                     <div className="card-glass h-full flex flex-col items-center text-center p-6 sm:p-10 hover:translate-y-[-5px] transition-transform duration-300 border-white/10 group-hover:border-primary/30 bg-black/40">
                         <div className="w-20 h-20 mb-6 rounded-2xl bg-gradient-to-br from-primary/20 to-teal-500/20 flex items-center justify-center group-hover:scale-110 transition-transform duration-500 border border-primary/30">

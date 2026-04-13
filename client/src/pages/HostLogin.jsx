@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const HostLogin = () => {
@@ -6,6 +6,12 @@ const HostLogin = () => {
     const [password, setPassword] = useState('');
     const [isLogin, setIsLogin] = useState(true);
     const navigate = useNavigate();
+
+    useEffect(() => {
+        if (localStorage.getItem('token')) {
+            navigate('/host');
+        }
+    }, [navigate]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
