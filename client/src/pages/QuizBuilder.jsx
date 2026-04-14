@@ -221,7 +221,7 @@ const QuizBuilder = () => {
             });
             if (!res.ok) {
                 const err = await res.json();
-                throw new Error(err.message || 'AI generation failed');
+                throw new Error(`${err.message}: ${err.error || 'Unknown API error'}`);
             }
             const quiz = await res.json();
 
