@@ -35,7 +35,7 @@ const HostLogin = () => {
                     setIsLogin(true);
                 }
             } else {
-                alert(data.message);
+                alert(data.message || (data.errors && data.errors[0]?.msg) || 'Authentication failed');
             }
         } catch (err) {
             alert('Error: ' + err.message);

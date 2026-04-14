@@ -29,6 +29,9 @@ router.post('/register',
             await user.save();
             res.status(201).json({ message: 'User registered successfully' });
         } catch (err) {
+            if (err.code === 11000) {
+                return res.status(400).json({ message: 'Username already exists. Please choose another one.' });
+            }
             res.status(400).json({ message: err.message });
         }
     }

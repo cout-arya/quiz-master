@@ -15,6 +15,10 @@ const upload = multer({ dest: 'uploads/' });
 const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
     baseURL: 'https://openrouter.ai/api/v1',
+    defaultHeaders: {
+        "HTTP-Referer": process.env.CLIENT_URL || "http://localhost:5173",
+        "X-Title": "QuizMaster AI"
+    }
 });
 
 // ─── Helper: Retry AI generation with exponential backoff ───
@@ -23,11 +27,18 @@ async function generateWithRetry(prompt, maxRetries = 3) {
         try {
             const response = await openai.chat.completions.create({
                 messages: [{ role: "user", content: prompt }],
-                model: "gpt-3.5-turbo",
+                model: "openai/gpt-3.5-turbo",
             });
             const text = response.choices[0].message.content.trim();
-            // Strip markdown code fences if present
-            const cleaned = text.replace(/^```json\n?/, '').replace(/\n?```$/, '');
+            
+            let cleaned = text;
+            const match = text.match(/```json\s*([\s\S]*?)\s*```/i);
+            if (match) {
+                cleaned = match[1];
+            } else {
+                cleaned = text.replace(/```json/gi, '').replace(/```/g, '').trim();
+            }
+            
             const parsed = JSON.parse(cleaned);
             // Validate structure
             if (!parsed.title || !Array.isArray(parsed.questions)) {
@@ -350,10 +361,18 @@ Respond with JSON only: { "suggestions": ["...", "...", "..."] }`;
 
             const response = await openai.chat.completions.create({
                 messages: [{ role: "user", content: prompt }],
-                model: "gpt-3.5-turbo",
+                model: "openai/gpt-3.5-turbo",
             });
             const text = response.choices[0].message.content.trim();
-            const cleaned = text.replace(/^```json\n?/, '').replace(/\n?```$/, '');
+            
+            let cleaned = text;
+            const match = text.match(/```json\s*([\s\S]*?)\s*```/i);
+            if (match) {
+                cleaned = match[1];
+            } else {
+                cleaned = text.replace(/```json/gi, '').replace(/```/g, '').trim();
+            }
+            
             const parsed = JSON.parse(cleaned);
             res.json(parsed);
         } catch (err) {
